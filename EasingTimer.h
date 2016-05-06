@@ -32,32 +32,17 @@
 #define _ELASTIC_INOUT_ 25
 
 
-// Arduino versioning.
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#define uint8 uint8_t
-#define uint16 uint16_t
-#define uint32 uint32_t
-#define uint64 uint64_t
-#define int8 int8_t
-#define int16 int16_t
-#define int32 int32_t
-#define int64 int64_t
-#define boolean bool
-#else
-//#include "WProgram.h" //arduino case
-#include "pandora.h" // OpenCM case
-#endif
 #include "PennerEasing.h"
 
 typedef struct {
-    float (*ease_func)(uint16,uint16,uint32,uint32);
-    void (*cb_func)(uint16,float);
-    uint32 s_time;
-    uint16 begin;
-    uint16 end;
-    uint16 dur;
-    uint16 uid;
+    float (*ease_func)(uint16_t,uint16_t,uint32_t,uint32_t);
+    void (*cb_func)(uint16_t,float);
+    uint32_t s_time;
+    uint16_t begin;
+    uint16_t end;
+    uint16_t dur;
+    uint16_t uid;
     bool active;
 } ease_delg; //32,32,32,16,16,16, 8 = 152bytes
 
@@ -65,41 +50,45 @@ class EasingTimer {
 public:
     explicit EasingTimer();
 
-    const static uint8 MAX_TIMER = MAX_FUNCS;
+    const static uint8_t MAX_TIMER = MAX_FUNCS;
     
-    int8 add(uint16 begin,uint16 end, uint32 dur,void(*callback)(uint16, float),uint8 easing_type);
-    int8 add(uint16 begin,uint16 end, uint32 dur,void(*callback)(uint16, float),uint8 easing_type, uint16 uid);
-    bool start(uint8 fid);
+    int8_t add(uint16_t begin,uint16_t end, uint32_t dur,void(*callback)(uint16_t, float),uint8_t easing_type);
+    int8_t add(uint16_t begin,uint16_t end, uint32_t dur,void(*callback)(uint16_t, float),uint8_t easing_type, uint16_t uid);
+    bool start(uint8_t fid);
     void clear();
-    void clear(uint8 fid);
+    void clear(uint8_t fid);
+    void frequency(uint16_t Hz);
     
     void run();
     
     //more to come
-    static const uint8 QUAD_IN = _QUAD_IN_;
-    static const uint8 QUAD_OUT = _QUAD_OUT_;
-    static const uint8 QUAD_INOUT = _QUAD_INOUT_;
+    static const uint8_t QUAD_IN = _QUAD_IN_;
+    static const uint8_t QUAD_OUT = _QUAD_OUT_;
+    static const uint8_t QUAD_INOUT = _QUAD_INOUT_;
     
-    static const uint8 BACK_IN = _BACK_IN_;
-    static const uint8 BACK_OUT = _BACK_OUT_;
-    static const uint8 BACK_INOUT = _BACK_INOUT_;
+    static const uint8_t BACK_IN = _BACK_IN_;
+    static const uint8_t BACK_OUT = _BACK_OUT_;
+    static const uint8_t BACK_INOUT = _BACK_INOUT_;
     
-    static const uint8 BOUNCE_IN = _BOUNCE_IN_;
-    static const uint8 BOUNCE_OUT = _BOUNCE_OUT_;
-    static const uint8 BOUNCE_INOUT = _BOUNCE_INOUT_;
+    static const uint8_t BOUNCE_IN = _BOUNCE_IN_;
+    static const uint8_t BOUNCE_OUT = _BOUNCE_OUT_;
+    static const uint8_t BOUNCE_INOUT = _BOUNCE_INOUT_;
     
-    static const uint8 EXPO_IN = _EXPO_IN_;
-    static const uint8 EXPO_OUT = _EXPO_OUT_;
-    static const uint8 EXPO_INOUT = _EXPO_INOUT_;
+    static const uint8_t EXPO_IN = _EXPO_IN_;
+    static const uint8_t EXPO_OUT = _EXPO_OUT_;
+    static const uint8_t EXPO_INOUT = _EXPO_INOUT_;
     
-    static const uint8 ELASTIC_IN = _ELASTIC_IN_;
-    static const uint8 ELASTIC_OUT = _ELASTIC_OUT_;
-    static const uint8 ELASTIC_INOUT = _ELASTIC_INOUT_;
+    static const uint8_t ELASTIC_IN = _ELASTIC_IN_;
+    static const uint8_t ELASTIC_OUT = _ELASTIC_OUT_;
+    static const uint8_t ELASTIC_INOUT = _ELASTIC_INOUT_;
     
 private:
     ease_delg delg[MAX_FUNCS];
     
-    int8 get_empty_spot();
+    uint16_t update_freq;
+    uint32_t p_time;
+    
+    int8_t get_empty_spot();
 };
 
 #endif /* EasingTimer_hpp */

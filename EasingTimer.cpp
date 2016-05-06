@@ -10,7 +10,10 @@
 
 EasingTimer::EasingTimer()
 {
-    for (uint8 i = 0; i < MAX_FUNCS; ++i) {
+    update_freq = 1000/10; //1000ms /10Hz update frrequency
+    p_time = millis();
+    
+    for (uint8_t i = 0; i < MAX_FUNCS; ++i) {
         delg[i].s_time = 0;
         delg[i].active = false;
     }
@@ -18,12 +21,15 @@ EasingTimer::EasingTimer()
 
 void EasingTimer::run()
 {
-    uint32 ctime = millis();
-    for (uint8 i = 0; i < MAX_FUNCS; ++i) {
+    uint32_t c_time = millis();
+    if (c_time - p_time < update_freq) return;
+    p_time = c_time;
+    
+    for (uint8_t i = 0; i < MAX_FUNCS; ++i) {
         
         //run through active delegates, time 0 and active true means a waiting ease to be started later
         if(delg[i].s_time > 0 && delg[i].active){
-            uint32 t_diff = ctime - delg[i].s_time;
+            uint32_t t_diff = c_time - delg[i].s_time;
             
             float f;
             if(delg[i].begin > delg[i].end)
@@ -34,19 +40,22 @@ void EasingTimer::run()
             }
             
             if(t_diff<=delg[i].dur) delg[i].cb_func(delg[i].uid, f);
-            else delg[i].active = false; //deactivate
+            else{
+                delg[i].cb_func(delg[i].uid, delg[i].end); //go to end
+                delg[i].active = false; //deactivate
+            }
         }
     }
 }
 
-bool EasingTimer::start(uint8 fid)
+bool EasingTimer::start(uint8_t fid)
 {
     if(fid < MAX_FUNCS) delg[fid].s_time = millis();
 }
 
-int8 EasingTimer::add(uint16 begin,uint16 end, uint32 dur,void(*callback)(uint16, float),uint8 easing_type)
+int8_t EasingTimer::add(uint16_t begin,uint16_t end, uint32_t dur,void(*callback)(uint16_t, float),uint8_t easing_type)
 {
-    int8 spot = get_empty_spot();
+    int8_t spot = get_empty_spot();
     if(spot<0) return -1; //no empty spot found
     
     ease_delg fs;
@@ -83,9 +92,9 @@ int8 EasingTimer::add(uint16 begin,uint16 end, uint32 dur,void(*callback)(uint16
     return spot;
 }
 
-int8 EasingTimer::add(uint16 begin, uint16 end, uint32 dur, void (*callback)(uint16, float), uint8 easing_type, uint16 uid)
+int8_t EasingTimer::add(uint16_t begin, uint16_t end, uint32_t dur, void (*callback)(uint16_t, float), uint8_t easing_type, uint16_t uid)
 {
-    int8 spot = get_empty_spot();
+    int8_t spot = get_empty_spot();
     if(spot<0) return -1; //no empty spot found
     
     ease_delg fs;
@@ -122,16 +131,21 @@ int8 EasingTimer::add(uint16 begin, uint16 end, uint32 dur, void (*callback)(uin
     return spot;
 }
 
+void EasingTimer::frequency(uint16_t Hz)
+{
+    update_freq = 1000/Hz;
+}
+
 void EasingTimer::clear()
 {
     //remove all running easing functions
-    for (uint8 i = 0; i < MAX_FUNCS; ++i) {
+    for (uint8_t i = 0; i < MAX_FUNCS; ++i) {
         delg[i].s_time = 0;
         delg[i].active = false;
     }
 }
 
-void EasingTimer::clear(uint8 fid)
+void EasingTimer::clear(uint8_t fid)
 {
     if(!delg[fid].active) return;
     //remove a running easing function
@@ -141,7 +155,7 @@ void EasingTimer::clear(uint8 fid)
 
 //PRIVATE
 
-int8 EasingTimer::get_empty_spot()
+int8_t EasingTimer::get_empty_spot()
 {
     for (int i = 0; i < MAX_FUNCS; i++) {
         if(!delg[i].active)return i;

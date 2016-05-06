@@ -8,9 +8,12 @@
 //  Copyright © 2015 Aduen Darriba. All rights reserved.
 //
 
-#include "PennerEasing.h"
+#define PI 3.1415926535897932384626433832795
 
-float Easing::Quad_easeIn(uint16 start, uint16 end, uint32 dur, uint32 t_diff)
+#include "PennerEasing.h"
+#include "math.h"
+
+float Easing::Quad_easeIn(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff)
 {
     float c = end;
     float t = t_diff;
@@ -20,7 +23,7 @@ float Easing::Quad_easeIn(uint16 start, uint16 end, uint32 dur, uint32 t_diff)
     return c*(t/=d)*t + b;
 }
 
-float Easing::Quad_easeOut (uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Quad_easeOut (uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -29,7 +32,7 @@ float Easing::Quad_easeOut (uint16 start, uint16 end, uint32 dur, uint32 t_diff)
     return -c *(t/=d)*(t-2) + b;
 }
 
-float Easing::Quad_easeInOut (uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Quad_easeInOut (uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -39,7 +42,7 @@ float Easing::Quad_easeInOut (uint16 start, uint16 end, uint32 dur, uint32 t_dif
     return -c/2 * (((t-2)*(--t)) - 1) + b;
 }
 
-float Easing::Back_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Back_easeIn (uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -49,7 +52,7 @@ float Easing::Back_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff) 
     float postFix = t/=d;
     return c*(postFix)*t*((s+1)*t - s) + b;
 }
-float Easing::Back_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Back_easeOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -59,7 +62,7 @@ float Easing::Back_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) 
     return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
 }
 
-float Easing::Back_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Back_easeInOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -71,7 +74,7 @@ float Easing::Back_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff
     return c/2*((postFix)*t*(((s*=(1.525f))+1)*t + s) + 2) + b;
 }
 
-float Easing::Bounce_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Bounce_easeIn (uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -79,7 +82,7 @@ float Easing::Bounce_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff
     
     return c - Bounce_easeOut (d-t, 0, c, d) + b;
 }
-float Easing::Bounce_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Bounce_easeOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -99,7 +102,7 @@ float Easing::Bounce_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff
     }
 }
 
-float Easing::Bounce_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Bounce_easeInOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -109,7 +112,7 @@ float Easing::Bounce_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_di
     else return Bounce_easeOut (t*2-d, 0, c, d) * .5f + c*.5f + b;
 }
 
-float Easing::Expo_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Expo_easeIn (uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -117,7 +120,7 @@ float Easing::Expo_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff) 
     
     return (t==0) ? b : c * pow(2, 10 * (t/d - 1)) + b;
 }
-float Easing::Expo_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Expo_easeOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -126,7 +129,7 @@ float Easing::Expo_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) 
     return (t==d) ? b+c : c * (-pow(2, -10 * t/d) + 1) + b;
 }
 
-float Easing::Expo_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Expo_easeInOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -138,7 +141,7 @@ float Easing::Expo_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff
     return c/2 * (-pow(2, -10 * --t) + 2) + b;
 }
 
-float Easing::Elastic_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Elastic_easeIn (uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -152,7 +155,7 @@ float Easing::Elastic_easeIn (uint16 start, uint16 end, uint32 dur, uint32 t_dif
     return -(postFix * sin((t*d-s)*(2*PI)/p )) + b;
 }
 
-float Easing::Elastic_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Elastic_easeOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
@@ -165,7 +168,7 @@ float Easing::Elastic_easeOut(uint16 start, uint16 end, uint32 dur, uint32 t_dif
     return (a*pow(2,-10*t) * sin( (t*d-s)*(2*PI)/p ) + c + b);
 }
 
-float Easing::Elastic_easeInOut(uint16 start, uint16 end, uint32 dur, uint32 t_diff) {
+float Easing::Elastic_easeInOut(uint16_t start, uint16_t end, uint32_t dur, uint32_t t_diff) {
     float c = end;
     float t = t_diff;
     float b = start;
