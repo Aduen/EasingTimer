@@ -49,7 +49,7 @@ typedef struct {
 class EasingTimer {
 public:
     explicit EasingTimer();
-
+    
     const static uint8_t MAX_TIMER = MAX_FUNCS;
     
     int8_t add(uint16_t begin,uint16_t end, uint32_t dur,void(*callback)(uint16_t, float),uint8_t easing_type);
